@@ -1,5 +1,5 @@
 # coding:utf8
-from baike import url_manage, html_download, html_parser, html_export, mysqldb
+from crawler import url_manage, html_download, html_parser, html_export, mysqldb
 
 class SpiderMain(object):
     def __init__(self):
