@@ -15,7 +15,7 @@ class SpiderMain(object):
         self.msq = mysqldb.MysqlDB()
 
     def craw(self):
-        i = self.msq.getLast()[0] or 0
+        i = self.msq.getLast()
         while True:
             root_url = "http://baike.baidu.com/view/" + str(i+1) + ".htm"
             # 获取源代码

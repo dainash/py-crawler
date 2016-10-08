@@ -29,7 +29,9 @@ class MysqlDB(object):
     def getLast(self):
         getLastData = ("select `index` from page_data order by id DESC limit 1")
         self.cursor.execute(getLastData)
-        last_one = self.cursor.fetchone()
+
+        last_one = self.cursor.fetchone()[0] if self.cursor.fetchone() else 0
+
         self.cnx.commit()
         self.cnx.close()
         return last_one
