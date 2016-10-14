@@ -1,5 +1,5 @@
 # coding:utf8
-from crawler import url_manage, html_download, html_parser, html_export, mysqldb
+from common import url_manage, html_download, html_parser, html_export, mysqldb
 
 class SpiderMain(object):
     def __init__(self):
