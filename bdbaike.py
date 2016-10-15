@@ -15,7 +15,8 @@ class SpiderMain(object):
         self.msq = mysqldb.MysqlDB()
 
     def craw(self):
-        i = self.msq.getLast()
+        getlast_sql = 'select `index` from page_data order by id DESC limit 1'
+        i = self.msq.getLast(getlast_sql)
         while True:
             root_url = "http://baike.baidu.com/view/" + str(i+1) + ".htm"
             # 获取源代码
@@ -41,10 +42,15 @@ class SpiderMain(object):
                         img = ''
 
                     dict = (title, img, desc, i)
+                    insert_sql = ("INSERT INTO page_data "
+                   "(title, img, description, `index`) "
+                   "VALUES (%s, %s, %s, %s)")
                     # 存储数据
-                    self.export.collect_data(dict)
-
-                    print 'crawed ' + str(i) + ' success'
+                    if title and desc:
+                        self.export.collect_data(dict, insert_sql)
+                        print 'crawed ' + str(i) + ' success'
+                    else:
+                        print 'crawed data' + str(i) + 'empty desc'
                 else:
                     print 'crawed ' + str(i) + ' parse failed'
                 i += 1

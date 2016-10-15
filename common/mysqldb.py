@@ -3,35 +3,44 @@ mysql only use for store parsed web page data
 only supply create api,search api
 """
 import mysql.connector
-
+import ConfigParser
 
 class MysqlDB(object):
     def __init__(self):
+        cf = ConfigParser.ConfigParser()
+        cf.read('conf/db.conf')
+
+        user = cf.get('common', 'db_user')
+        password = cf.get('common', 'db_pswd')
+        host = cf.get('common', 'db_host')
+
         config = {
-            'user': 'root',
-            'password': '297279',
-            'host': '127.0.0.1',
+            'user': user,
+            'password': password,
+            'host': host,
             'database': 'baike',
             'raise_on_warnings': True
         }
         self.cnx = mysql.connector.connect(**config)
         self.cursor = self.cnx.cursor()
 
-    def insert(self, value):
-        addData = ("INSERT INTO page_data "
-                   "(title, img, description, `index`) "
-                   "VALUES (%s, %s, %s, %s)")
-        self.cursor.execute(addData, value)
+    def insert(self, value, sql):
+        self.cursor.execute(sql, value)
 
         self.cnx.commit()
         self.cnx.close()
 
-    def getLast(self):
-        getLastData = ("select `index` from page_data order by id DESC limit 1")
-        self.cursor.execute(getLastData)
-
-        last_one = self.cursor.fetchone()[0] if self.cursor.fetchone() else 0
+    def getLast(self, getlast_sql):
+        self.cursor.execute(getlast_sql)
+        result = self.cursor.fetchone()
+        if result is not None:
+            last_one = result[0]
+        else:
+            last_one = 0
 
         self.cnx.commit()
         self.cnx.close()
+
         return last_one
+
+
