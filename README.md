@@ -6,6 +6,6 @@
 
 
 
-### douban.py(coming soon)
+### dbmovie.py(coming soon)
 
-爬取豆瓣推荐高分电影的简介和评论
+爬取豆瓣推荐高分电影的简介和封面
